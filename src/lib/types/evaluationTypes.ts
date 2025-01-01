@@ -47,3 +47,13 @@ export interface FormValues {
   language: Languages | "";
   images: File[];
 }
+
+export interface EvaluationResponse {
+  criteria_scores: {
+    criterion: string;
+    score: number;
+    max_score: number;
+    justification: string;
+  }[];
+  total_score: number;
+}
