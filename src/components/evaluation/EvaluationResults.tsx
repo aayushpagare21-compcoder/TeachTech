@@ -35,9 +35,9 @@ const EvaluationResults: React.FC<{
     <div className="space-y-6 mt-8">
       <Alert className="bg-green-50 border-green-200">
         <CheckCircle className="h-4 w-4 text-green-600" />
-        <AlertTitle className="text-green-800">Evaluation Complete</AlertTitle>
+        <AlertTitle className="text-green-800">EValutazione completata</AlertTitle>
         <AlertDescription className="text-green-700">
-          Total Score: {value.total_score} out of {totalPossibleScore} (
+        Punteggio totale: {value.total_score} da {totalPossibleScore} (
           {scorePercentage.toFixed(1)}%)
         </AlertDescription>
       </Alert>
@@ -76,7 +76,7 @@ const EvaluationResults: React.FC<{
         }}
       >
         {" "}
-        Back{" "}
+        Indietro{" "}
       </Button>
     </div>
   );

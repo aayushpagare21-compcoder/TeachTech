@@ -182,7 +182,7 @@ const EvaluationForm: React.FC = () => {
                           Lingua
                         </Label>
                         <p className="text-sm text-muted-foreground mb-2">
-                          Seleziona la lingua della risposta
+                          Seleziona la lingua in cui verrà fornito il feedback
                         </p>
                         <Field
                           as="select"

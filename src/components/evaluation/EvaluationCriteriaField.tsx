@@ -61,7 +61,7 @@ export const EvaluationCriteriaField: React.FC<
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="w-[200px] text-xs">
-                      {` E.g., "Relevance to Question", "Critical Analysis", "Evidence Support"`}
+                      {`ad esempio, "rilevanza per la domanda", "analisi critica", "supporto dell'evidenza"`}
                     </p>
                   </TooltipContent>
                 </Tooltip>

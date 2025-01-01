@@ -34,6 +34,7 @@ Instructions:
 - Final Score Calculation:
 - Sum the scores from all criteria to calculate the final score out of {totalScore}.
 
+Please generate your response in {language}.
 {formatInstructions}
 `;
 
