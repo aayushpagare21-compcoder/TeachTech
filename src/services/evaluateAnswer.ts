@@ -18,9 +18,9 @@ const model = new ChatGoogleGenerativeAI({
 });
 
 //Propmpt template
-const promptTemplate = `You are a {language} {subject} teacher tasked with evaluating a student's answer.
+const promptTemplate = `You are a {language} {subject} teacher who understands Italian and English well tasked with evaluating a student's answer.
 Your evaluation should be based on the provided question, answer, and the evaluation criteria below. 
-The total score is {totalScore} points.
+The total score is {totalScore} points. The evaluation criteria and question can be in Italian and English.
 
 Evaluation Details:
 question: {question}
@@ -96,4 +96,3 @@ export async function evaluateAnswer({
     throw error;
   }
 }
-

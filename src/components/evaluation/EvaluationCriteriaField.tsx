@@ -17,7 +17,7 @@ import {
 import { cn } from "teachtech/lib/utils";
 import { EvaluationCriteria } from "teachtech/lib/types/evaluationTypes";
 
-export interface EvaluationCriteriaFieldProps { 
+export interface EvaluationCriteriaFieldProps {
   index: number;
   onRemove: () => void;
   isRemoveDisabled: boolean;
@@ -36,7 +36,7 @@ export const EvaluationCriteriaField: React.FC<
     <CardContent className="p-4 md:p-6">
       <div className="flex justify-between items-start mb-4">
         <Badge variant="outline" className="text-sm">
-          Criteria {index + 1}
+          Criteri {index + 1}
         </Badge>
         <Button
           onClick={onRemove}
@@ -52,7 +52,7 @@ export const EvaluationCriteriaField: React.FC<
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="md:col-span-4">
           <div className="flex items-center gap-2 mb-2">
-            <Label className="text-sm font-medium">Name</Label>
+            <Label className="text-sm font-medium">Nome</Label>
             {index === 0 && (
               <TooltipProvider>
                 <Tooltip>
@@ -71,7 +71,7 @@ export const EvaluationCriteriaField: React.FC<
           <Field
             as={Input}
             name={`evaluationCriteria[${index}].name`}
-            placeholder="Enter criteria name"
+            placeholder="e.g. Regno di Sicilia"
             className={cn(
               "w-full",
               errors?.name && "border-red-500 focus:border-red-500"
@@ -82,7 +82,7 @@ export const EvaluationCriteriaField: React.FC<
 
         <div className="md:col-span-6">
           <div className="flex items-center gap-2 mb-2">
-            <Label className="text-sm font-medium">Description</Label>
+            <Label className="text-sm font-medium">Descrizione</Label>
             {index === 0 && (
               <TooltipProvider>
                 <Tooltip>
@@ -91,8 +91,8 @@ export const EvaluationCriteriaField: React.FC<
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="w-[200px] text-xs">
-                      Provide a clear 50-60 word description of how this
-                      criterion will be evaluated
+                      Fornisci una chiara descrizione di 50-60 parole di come
+                      verrà valutato questo criterio
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -102,7 +102,7 @@ export const EvaluationCriteriaField: React.FC<
           <Field
             as={Textarea}
             name={`evaluationCriteria[${index}].description`}
-            placeholder="Describe how this criterion will be evaluated"
+            placeholder="e.g. Regno di Sicilia deve essere discusso"
             className={cn(
               "resize-none h-24",
               errors?.description && "border-red-500 focus:border-red-500"
@@ -113,7 +113,7 @@ export const EvaluationCriteriaField: React.FC<
 
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-2">
-            <Label className="text-sm font-medium">Weight (%)</Label>
+            <Label className="text-sm font-medium">Peso (%)</Label>
             {index === 0 && (
               <TooltipProvider>
                 <Tooltip>
@@ -122,7 +122,7 @@ export const EvaluationCriteriaField: React.FC<
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="w-[200px] text-xs">
-                      Total weights must sum to 100%
+                      La somma dei pesi totali deve essere del 100%
                     </p>
                   </TooltipContent>
                 </Tooltip>

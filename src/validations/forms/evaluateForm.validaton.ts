@@ -3,22 +3,22 @@ import * as Yup from "yup";
 
 export const validationSchema = Yup.object().shape({
   question: Yup.string().required(
-    "Please enter the question for which answer would be evaluated.",
+    "Inserisci la domanda per la quale verrebbe valutata la risposta."
   ),
   evaluationCriteria: Yup.array()
     .of(
       Yup.object().shape({
         name: Yup.string().required(
-          "Please enter the name of the evaluation criteria.",
+          "Inserisci il nome dei criteri di valutazione."
         ),
         description: Yup.string().required(
-          "Please enter the description of the evaluation criteria",
+          "Inserisci la descrizione dei criteri di valutazione"
         ),
         weightage: Yup.number()
-          .required("Please enter the weightage of the evaluation criteria")
-          .min(0, "Weightage must be greater than zero")
-          .max(100, "Weightage cannot exceed 100"),
-      }),
+          .required("Inserire la ponderazione dei criteri di valutazione")
+          .min(0, "Il peso deve essere maggiore di zero")
+          .max(100, "Il peso non può superare i 100"),
+      })
     )
     .test("weightage-validation", "", function (value) {
       if (!value || !Array.isArray(value)) return true;
@@ -26,13 +26,13 @@ export const validationSchema = Yup.object().shape({
       // Calculate total weightage
       const totalWeightage = value.reduce(
         (sum, criteria) => sum + (Number(criteria.weightage) || 0),
-        0,
+        0
       );
 
       // Check if all fields are filled
       const allFieldsFilled = value.every(
         (criteria) =>
-          criteria.weightage !== undefined && criteria.weightage !== null,
+          criteria.weightage !== undefined && criteria.weightage !== null
       );
 
       if (!allFieldsFilled) return true;
@@ -43,23 +43,23 @@ export const validationSchema = Yup.object().shape({
           path: `evaluationCriteria[${lastIndex}].weightage`,
           message:
             totalWeightage !== 100
-              ? "Weightage of all the criteria must sum up to 100."
+              ? "La ponderazione di tutti i criteri deve essere pari a 100."
               : "",
         });
       }
 
       return true;
     }),
-  totalScore: Yup.number().required("Please enter the total score."),
+  totalScore: Yup.number().required("Inserisci il punteggio totale."),
   subject: Yup.mixed<Subjects>().oneOf(
     Object.values(Subjects),
-    "The entered subject is not valid",
+    "L'oggetto inserito non è valido"
   ),
   language: Yup.mixed<Languages>().oneOf(
     Object.values(Languages),
-    "The entered language is not valid",
+    "La lingua inserita non è valida"
   ),
   images: Yup.array()
-    .of(Yup.mixed().required("Each image must be valid"))
-    .min(1, "Please upload at least one image."),
+    .of(Yup.mixed().required("Ogni immagine deve essere valida"))
+    .min(1, "Si prega di caricare almeno un'immagine."),
 });

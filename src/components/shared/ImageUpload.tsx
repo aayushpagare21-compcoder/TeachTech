@@ -19,7 +19,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       htmlFor="imageUpload"
       className="flex items-center justify-center gap-2 w-[200px] h-[40px] p-2 text-sm font-medium text-white bg-black rounded-md cursor-pointer hover:bg-black/80"
     >
-      <Upload size={18} /> Upload Images
+      <Upload size={18} /> Carica immagini
     </label>
     <Input
       id="imageUpload"

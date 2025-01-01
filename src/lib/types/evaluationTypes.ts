@@ -23,14 +23,14 @@ export interface ImageData {
 export const MAX_EVALUATION_CRITERIA_ALLOWED = 5;
 
 export const subjectOptions = [
-  { label: "History", value: Subjects.HISTORY },
-  { label: "Philosophy", value: Subjects.PHILOSOPHY },
-  { label: "Essay", value: Subjects.ESSAY },
+  { label: "Storia", value: Subjects.HISTORY },
+  { label: "Filosofia", value: Subjects.PHILOSOPHY },
+  { label: "Scrittura di saggi", value: Subjects.ESSAY },
 ];
 
 export const languageOptions = [
   { label: "Italian", value: Languages.ITALIAN },
-  { label: "English", value: Languages.ENGLISH },
+  { label: "Inglese", value: Languages.ENGLISH },
 ];
 
 export interface EvaluationCriteria {

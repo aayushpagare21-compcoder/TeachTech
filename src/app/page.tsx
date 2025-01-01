@@ -15,10 +15,10 @@ export default function Home() {
             mano.
             <br />
             <span className="italic">
-              {`Ora supporta l'inglese e l'italiano.`}
+              {`Supporta l'inglese e l'italiano.`}
             </span>
           </p>
-          <div className="flex gap-4 mt-6">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-6">
             {/* Evaluate Now Button */}
             <a
               href="/evaluate"
@@ -27,7 +27,7 @@ export default function Home() {
               className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm sm:text-base shadow-md hover:bg-blue-700 transition-all"
               aria-label="Evaluate now"
             >
-              Evaluate now
+              Valuta domanda
             </a>
             {/* Valuta Ora Button */}
             <a
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
 
         {/* Right Section */}
-        <div className="mt-12 sm:mt-0 sm:ml-8 w-full sm:w-1/2 max-w-md">
+        <div className="mt-8 md:mt-12 sm:mt-0 sm:ml-8 w-full sm:w-1/2 max-w-md">
           <Image
             src="/apphero.jpg"
             alt="Image needs to be uploaded."

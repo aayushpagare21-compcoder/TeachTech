@@ -85,9 +85,9 @@ const EvaluationForm: React.FC = () => {
     question: "",
     evaluationCriteria: [
       {
-        name: "Description one",
-        description: "Sample Description one",
-        weightage: 20,
+        name: "",
+        description: "",
+        weightage: 10,
       },
     ],
     totalScore: 0,
@@ -121,16 +121,14 @@ const EvaluationForm: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="space-y-6">
                     <div>
-                      <Label className="text-base font-semibold">
-                        Question
-                      </Label>
+                      <Label className="text-base font-semibold">Domanda</Label>
                       <p className="text-sm text-muted-foreground mb-2">
-                        Write your question clearly and concisely
+                        Scrivi la tua domanda in modo chiaro e conciso.
                       </p>
                       <Field
                         as={Textarea}
                         name="question"
-                        placeholder="e.g., Write a 250-word essay on The Effects of Global Warming"
+                        placeholder="e.g. A quale regno si interessò soprattutto Federico II nel corso della sua vita? Quale zona comprendeva? Da chi Federico lo ereditò? Come lo amministrò?"
                         className="min-h-[120px]"
                       />
                       {errors.question && touched.question && (
@@ -143,16 +141,16 @@ const EvaluationForm: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
                         <Label className="text-base font-semibold">
-                          Total Score
+                          Punteggio totale
                         </Label>
                         <p className="text-sm text-muted-foreground mb-2">
-                          Maximum possible score
+                          Punteggio massimo possibile
                         </p>
                         <Field
                           as={Input}
                           type="number"
                           name="totalScore"
-                          placeholder="Enter total score"
+                          placeholder="Inserisci il punteggio totale"
                         />
                         {errors.totalScore && touched.totalScore && (
                           <FieldError>{errors.totalScore}</FieldError>
@@ -164,7 +162,7 @@ const EvaluationForm: React.FC = () => {
                           Subject
                         </Label>
                         <p className="text-sm text-muted-foreground mb-2">
-                          Choose the relevant subject
+                          {`Scegli l'argomento pertinente`}
                         </p>
                         <Field
                           as="select"
@@ -181,10 +179,10 @@ const EvaluationForm: React.FC = () => {
 
                       <div>
                         <Label className="text-base font-semibold">
-                          Language
+                          Lingua
                         </Label>
                         <p className="text-sm text-muted-foreground mb-2">
-                          Select answer language
+                          Seleziona la lingua della risposta
                         </p>
                         <Field
                           as="select"
@@ -204,7 +202,7 @@ const EvaluationForm: React.FC = () => {
               </Card>
 
               <div className="text-md font-bold md:-mb-4 ml-2">
-                Evaluation Criteria (Add five or less criteria)
+                Criteri di valutazione (aggiungere cinque o meno criteri)
               </div>
               <FieldArray name="evaluationCriteria">
                 {({ remove, push }) => (
@@ -247,8 +245,8 @@ const EvaluationForm: React.FC = () => {
                     {values.evaluationCriteria.length >=
                       MAX_EVALUATION_CRITERIA_ALLOWED && (
                       <div className="text-red-500 text-right">
-                        Only {MAX_EVALUATION_CRITERIA_ALLOWED} evaluation
-                        criteria are allowed.
+                        Sono ammessi solo {MAX_EVALUATION_CRITERIA_ALLOWED}{" "}
+                        criteri di valutazione..
                       </div>
                     )}
                   </div>
@@ -276,7 +274,7 @@ const EvaluationForm: React.FC = () => {
                   {isSubmitting ? (
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   ) : null}
-                  Evaluate Question
+                  Valuta domanda
                 </Button>
               </div>
             </Form>
