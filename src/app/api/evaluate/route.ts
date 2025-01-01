@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
       });
     const uploadedFiles = await Promise.all(uploadPromises);
 
+    console.log("files uploaded successfully")
+
     //Step 2: Send the uploaded files to textract ocr service.
     const extractedTexts = await Promise.all(
       uploadedFiles.map(async (s3Key) => {
@@ -40,6 +42,7 @@ export async function POST(req: NextRequest) {
     );
     //Step 3: Prepare the final answer.
     const answer = extractedTexts.join(",");
+    console.log("Text extracted successfully")
 
     //Step 4: Evaluate the answer
     const question = formData.get("question") as string;
@@ -58,6 +61,7 @@ export async function POST(req: NextRequest) {
       evaluationJSON,
       totalScore,
     });
+    console.log("Answer evaluated successfully")
 
     return NextResponse.json({ result: finalResponse });
   } catch (error) {
