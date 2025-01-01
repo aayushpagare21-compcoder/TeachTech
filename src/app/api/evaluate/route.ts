@@ -13,6 +13,8 @@ const textExtract = TextractService.getInstance(
   process.env.AWS_S3_BUCKET_NAME!
 );
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   try {
