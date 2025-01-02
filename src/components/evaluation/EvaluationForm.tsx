@@ -33,7 +33,7 @@ async function evaluateQuestion(formdata: FormValues) {
   formData.append("language", formdata.language);
   formData.append(
     "evaluationCriteria",
-    JSON.stringify(formdata.evaluationCriteria)
+    JSON.stringify(formdata.evaluationCriteria),
   );
   formdata.images.forEach((image, index) => {
     formData.append(`${index}-image`, image);
@@ -55,13 +55,13 @@ const EvaluationForm: React.FC = () => {
   const handleImageUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: (field: string, value: File[]) => void,
-    existingFiles: File[]
+    existingFiles: File[],
   ) => {
     const files = Array.from(e.target.files || []);
     const uniqueFiles = [...existingFiles, ...files].filter(
       (file, index, self) =>
         self.findIndex((f) => f.name === file.name && f.size === file.size) ===
-        index
+        index,
     );
     setImagePreviews((prev) => [
       ...prev,
@@ -73,7 +73,7 @@ const EvaluationForm: React.FC = () => {
   const handleRemoveImage = (
     index: number,
     setFieldValue: (field: string, value: File[]) => void,
-    values: FormValues
+    values: FormValues,
   ) => {
     const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
     const updatedFiles = values.images.filter((_, i) => i !== index);
@@ -235,7 +235,7 @@ const EvaluationForm: React.FC = () => {
                             MAX_EVALUATION_CRITERIA_ALLOWED ||
                           sumBy(
                             values.evaluationCriteria,
-                            (s: EvaluationCriteria) => s.weightage
+                            (s: EvaluationCriteria) => s.weightage,
                           ) >= 100
                         }
                       >

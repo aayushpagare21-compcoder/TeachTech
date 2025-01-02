@@ -14,7 +14,7 @@ const DynamicLoader = ({ messages }: DynamicLoaderProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setMessageIndex((prevIndex) =>
-        prevIndex < messages.length - 1 ? prevIndex + 1 : prevIndex
+        prevIndex < messages.length - 1 ? prevIndex + 1 : prevIndex,
       );
     }, 8000);
 

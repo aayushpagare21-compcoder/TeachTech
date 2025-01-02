@@ -51,7 +51,7 @@ const evaluationSchema = z.object({
         justification: z
           .string()
           .describe("Detailed explanation of why this score was awarded"),
-      })
+      }),
     )
     .describe("Array of evaluation scores for each criterion"),
   total_score: z.number().describe("Final score out of the total score"),

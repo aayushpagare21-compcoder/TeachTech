@@ -30,7 +30,7 @@ export const EvaluationCriteriaField: React.FC<
   <Card
     className={cn(
       "transition-all duration-200 hover:shadow-md",
-      errors && Object.keys(errors).length > 0 && "border-red-200"
+      errors && Object.keys(errors).length > 0 && "border-red-200",
     )}
   >
     <CardContent className="p-4 md:p-6">
@@ -74,7 +74,7 @@ export const EvaluationCriteriaField: React.FC<
             placeholder="e.g. Regno di Sicilia"
             className={cn(
               "w-full",
-              errors?.name && "border-red-500 focus:border-red-500"
+              errors?.name && "border-red-500 focus:border-red-500",
             )}
           />
           {errors?.name && <FieldError>{errors.name}</FieldError>}
@@ -105,7 +105,7 @@ export const EvaluationCriteriaField: React.FC<
             placeholder="e.g. Regno di Sicilia deve essere discusso"
             className={cn(
               "resize-none h-24",
-              errors?.description && "border-red-500 focus:border-red-500"
+              errors?.description && "border-red-500 focus:border-red-500",
             )}
           />
           {errors?.description && <FieldError>{errors.description}</FieldError>}
@@ -138,7 +138,7 @@ export const EvaluationCriteriaField: React.FC<
             min={1}
             className={cn(
               "w-full",
-              errors?.weightage && "border-red-500 focus:border-red-500"
+              errors?.weightage && "border-red-500 focus:border-red-500",
             )}
           />
           {errors?.weightage && <FieldError>{errors.weightage}</FieldError>}

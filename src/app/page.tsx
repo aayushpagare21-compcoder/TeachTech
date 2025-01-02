@@ -14,9 +14,7 @@ export default function Home() {
             Assistente AI intelligente per valutare le tue risposte scritte a
             mano.
             <br />
-            <span className="italic">
-              {`Supporta l'inglese e l'italiano.`}
-            </span>
+            <span className="italic">{`Supporta l'inglese e l'italiano.`}</span>
           </p>
           <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-6">
             {/* Evaluate Now Button */}

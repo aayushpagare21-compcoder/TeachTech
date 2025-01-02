@@ -28,16 +28,18 @@ const EvaluationResults: React.FC<{
       score: number;
       max_score: number;
       justification: string;
-    }) => c.max_score
+    }) => c.max_score,
   );
   const scorePercentage = (value.total_score / totalPossibleScore) * 100;
   return (
     <div className="space-y-6 mt-8">
       <Alert className="bg-green-50 border-green-200">
         <CheckCircle className="h-4 w-4 text-green-600" />
-        <AlertTitle className="text-green-800">EValutazione completata</AlertTitle>
+        <AlertTitle className="text-green-800">
+          EValutazione completata
+        </AlertTitle>
         <AlertDescription className="text-green-700">
-        Punteggio totale: {value.total_score} da {totalPossibleScore} (
+          Punteggio totale: {value.total_score} da {totalPossibleScore} (
           {scorePercentage.toFixed(1)}%)
         </AlertDescription>
       </Alert>
@@ -51,7 +53,7 @@ const EvaluationResults: React.FC<{
             className="border-l-4"
             style={{
               borderLeftColor: getCriteriaColor(
-                criteria.score / criteria.max_score
+                criteria.score / criteria.max_score,
               ),
             }}
           >
