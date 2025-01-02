@@ -57,3 +57,8 @@ export interface EvaluationResponse {
   }[];
   total_score: number;
 }
+
+export interface EvaluationCriteriaV2 {
+  criteria: string;
+  marks: number;
+}
