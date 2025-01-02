@@ -29,13 +29,13 @@ export default function Home() {
             </a>
             {/* Valuta Ora Button */}
             <a
-              href="/evaluate"
+              href="/evaluate-assignment"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white text-gray-800 dark:text-gray-200 font-semibold text-sm sm:text-base shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
               aria-label="Valuta ora"
             >
-              Valuta ora
+             {`Valutare l'assegnazione`}
             </a>
           </div>
         </div>
