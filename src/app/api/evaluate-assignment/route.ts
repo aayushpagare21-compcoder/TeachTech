@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       }),
     );
 
-    console.log("answer evaluated")
+    console.log("answer evaluated", responses)
 
     return NextResponse.json(responses);
   } catch (error) {
