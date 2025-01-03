@@ -39,12 +39,15 @@ export async function POST(req: NextRequest) {
         criteriafile.type,
       ),
     ]);
+    console.log("FIle upload successfully to S3")
 
     const [questionData, answerData, criteriaData] = await Promise.all([
       textExtract.extractTextFromS3PDF(questionFileKey),
       textExtract.extractTextFromS3PDF(answerFileKey),
       textExtract.extractTextFromS3PDF(criteriaFileKey),
     ]);
+
+    console.log("Text extracted successfully")
 
     console.log("questionData,", questionData);
     console.log("answerData,", answerData);
@@ -81,6 +84,8 @@ export async function POST(req: NextRequest) {
         });
       }),
     );
+
+    console.log("answer evaluated")
 
     return NextResponse.json(responses);
   } catch (error) {
