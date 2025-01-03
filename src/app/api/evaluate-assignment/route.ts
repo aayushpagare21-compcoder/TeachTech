@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
 }
 function parseQuestionsWithMarks(input: string) {
   const questionRegex =
-    /Question\s*(\d+\([a-zA-Z]\))\s*:\s*(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/gis;
+    /Question\s*(\d+\([a-zA-Z]\))\s*:\s*(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/gi;
   const marksRegex =
     /(?:Total Marks|Marks|Punteggio Totale|Punti Totali|Valutazione)\s*[:\.\-\s]*\s*(\d+)/i;
 
