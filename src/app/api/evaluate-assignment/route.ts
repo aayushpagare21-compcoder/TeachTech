@@ -55,7 +55,9 @@ export async function POST(req: NextRequest) {
 
     const questions = parseQuestionsWithMarks(questionData);
     const answers = parseAnswers(answerData);
-    const evaluationCriteria = parseCriteria(criteriaData);
+    const evaluationCriteria = parseCriteria(criteriaData); 
+
+    console.log("===============", questions, answerData, criteriaData)
 
     // Match answers to questions based on questionNumber and answerNumber
     const responses: AssesmentData[] = await Promise.all(
@@ -223,10 +225,5 @@ function parseCriteria(data: string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     lastIndex = endPos;
   }
-
-  // Log the final parsed result
-  console.log("Final parsed questions with criteria:");
-  console.log(JSON.stringify(questions, null, 2));
-
   return questions;
 }
