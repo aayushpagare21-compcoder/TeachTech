@@ -67,6 +67,7 @@ export async function evaluateAnswerV2({
   question: string;
   totalScore: number;
 }): Promise<AssesmentData> {
+  console.log("=========inside the geminiAI", answer, evaluationJSON, totalScore, answer)
   const prompt = PromptTemplate.fromTemplate(promptTemplate);
   const outputParser = StructuredOutputParser.fromZodSchema(evaluationSchema);
 
@@ -74,6 +75,7 @@ export async function evaluateAnswerV2({
   const formatInstructions = outputParser.getFormatInstructions();
 
   const chain = prompt.pipe(model).pipe(outputParser);
+  console.log("=========prompt", prompt)
 
   try {
     // Execute the chain
@@ -84,6 +86,7 @@ export async function evaluateAnswerV2({
       question,
       totalScore,
     });
+    console.log("=========result", result)
     return result;
   } catch (error) {
     console.error("Error during evaluation:", error);
