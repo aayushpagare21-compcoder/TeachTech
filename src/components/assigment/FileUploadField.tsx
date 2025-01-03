@@ -7,6 +7,7 @@ export const FileUploadField = ({
   exampleFormat,
   selectedFile,
   onFileChange,
+  disabled,
 }: {
   id: string;
   label: string;
@@ -14,6 +15,7 @@ export const FileUploadField = ({
   exampleFormat: React.ReactNode;
   selectedFile: File | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }) => (
   <div className="space-y-4">
     <div className="flex items-center gap-2">
@@ -49,6 +51,7 @@ export const FileUploadField = ({
           accept=".pdf"
           className="hidden"
           onChange={onFileChange}
+          disabled={disabled}
         />
       </label>
     </div>

@@ -2,10 +2,8 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { z } from "zod";
-import {
-  EvaluationCriteriaV2,
-  EvaluationResponse,
-} from "teachtech/lib/types/evaluationTypes";
+import { EvaluationCriteriaV2 } from "teachtech/lib/types/evaluationTypes";
+import { AssesmentData } from "teachtech/lib/types/evaluateAssignment.types";
 
 // GeminiAI model
 const model = new ChatGoogleGenerativeAI({
@@ -51,7 +49,11 @@ const evaluationSchema = z.object({
       }),
     )
     .describe("Array of evaluation scores for each criterion"),
-  total_score: z.number().describe("Final score out of the total score"),
+  total_score: z
+    .number()
+    .describe("Final score which is scored out of the maximum possible score"),
+  max_score: z.number().describe("Maximum possible score"),
+  question: z.string().describe("The question which you have evaluated."),
 });
 
 export async function evaluateAnswerV2({
@@ -64,7 +66,7 @@ export async function evaluateAnswerV2({
   evaluationJSON: EvaluationCriteriaV2[];
   question: string;
   totalScore: number;
-}): Promise<EvaluationResponse> {
+}): Promise<AssesmentData> {
   const prompt = PromptTemplate.fromTemplate(promptTemplate);
   const outputParser = StructuredOutputParser.fromZodSchema(evaluationSchema);
 

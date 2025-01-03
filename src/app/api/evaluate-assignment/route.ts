@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { S3Service } from "teachtech/services/s3.service";
 import { TextractService } from "teachtech/services/textract.service";
 import { evaluateAnswerV2 } from "teachtech/services/evaluateAnswerV2";
+import { AssesmentData } from "teachtech/lib/types/evaluateAssignment.types";
 
 const s3Service = S3Service.getInstance(process.env.AWS_S3_BUCKET_NAME!);
 const textExtract = TextractService.getInstance(
@@ -45,12 +46,16 @@ export async function POST(req: NextRequest) {
       textExtract.extractTextFromS3PDF(criteriaFileKey),
     ]);
 
+    console.log("questionData,", questionData);
+    console.log("answerData,", answerData);
+    console.log("criteriaData,", criteriaData);
+
     const questions = parseQuestionsWithMarks(questionData);
     const answers = parseAnswers(answerData);
     const evaluationCriteria = parseCriteria(criteriaData);
 
     // Match answers to questions based on questionNumber and answerNumber
-    const responses = await Promise.all(
+    const responses: AssesmentData[] = await Promise.all(
       questions.map((question) => {
         // Find the matching answer using the identifier key
         const matchingAnswer = answers.find(
@@ -88,7 +93,7 @@ export async function POST(req: NextRequest) {
 }
 function parseQuestionsWithMarks(input: string) {
   const questionRegex =
-    /Question\s*(\d+\([a-zA-Z]\)):(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/g;
+    /Question\s*(\d+\([a-zA-Z]\))\s*:\s*(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/gis;
   const marksRegex =
     /(?:Total Marks|Marks|Punteggio Totale|Punti Totali|Valutazione)\s*[:\.\-\s]*\s*(\d+)/i;
 
@@ -165,39 +170,58 @@ function parseCriteria(data: string) {
     identifier: string;
     criteria: { criteria: string; marks: number }[];
   }[] = [];
-  const questionPattern = /Evaluation Criteria (\d+\([a-zA-Z]\))/g;
-  const criteriaPattern = /Criteria: (.+?)\nmarks: ([\d.]+)/g;
 
-  let questionMatches;
-  let criteriaMatches;
+  // Updated pattern to allow for optional space between number and parenthesis
+  const questionPattern = /Evaluation Criteria (\d+\s*\([a-zA-Z]\)):/g;
+  // Match criteria and marks, handling multiline and different spacing
+  const criteriaPattern = /Criteria:\s*(.+?)[\r\n]+marks:\s*([\d.]+)/g;
 
-  // Loop through all questions in the text
-  while ((questionMatches = questionPattern.exec(data)) !== null) {
-    const questionIdentifier = questionMatches[1]; // E.g., 1(a), 1(b), etc.
+  let questionMatch;
+  let lastIndex = 0;
+
+  // Find all evaluation criteria sections
+  while ((questionMatch = questionPattern.exec(data)) !== null) {
+    const questionIdentifier = questionMatch[1].replace(/\s+/g, ""); // Remove spaces from identifier
+    const startPos = questionMatch.index + questionMatch[0].length;
+
+    // Find the next evaluation criteria section or end of string
+    const nextMatch = data.indexOf("Evaluation Criteria", startPos);
+    const endPos = nextMatch === -1 ? data.length : nextMatch;
+
+    // Extract the section for this question's criteria
+    const sectionText = data.slice(startPos, endPos);
     const criteriaList: { criteria: string; marks: number }[] = [];
 
-    console.log(`Found question identifier: ${questionIdentifier}`);
+    // Reset lastIndex for criteriaPattern
+    criteriaPattern.lastIndex = 0;
 
-    // Find all criteria for the current question
-    while ((criteriaMatches = criteriaPattern.exec(data)) !== null) {
-      const criteriaText = criteriaMatches[1];
-      const marks = parseFloat(criteriaMatches[2]);
+    // Find all criteria within this section
+    let criteriaMatch;
+    while ((criteriaMatch = criteriaPattern.exec(sectionText)) !== null) {
+      const criteriaText = criteriaMatch[1].trim();
+      const marks = parseFloat(criteriaMatch[2]);
 
-      // Add criteria to the list for the current question
-      criteriaList.push({ criteria: criteriaText, marks });
-      console.log(
-        `Added criteria for question ${questionIdentifier}: ${criteriaText} with marks: ${marks}`,
-      );
+      criteriaList.push({
+        criteria: criteriaText,
+        marks: marks,
+      });
     }
 
-    // Push the question with its criteria to the questions array
-    questions.push({ identifier: questionIdentifier, criteria: criteriaList });
+    // Only add the question if we found criteria for it
+    if (criteriaList.length > 0) {
+      questions.push({
+        identifier: questionIdentifier,
+        criteria: criteriaList,
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    lastIndex = endPos;
   }
 
-  console.log(
-    "Final parsed questions with criteria:",
-    JSON.stringify(questions, null, 2),
-  );
+  // Log the final parsed result
+  console.log("Final parsed questions with criteria:");
+  console.log(JSON.stringify(questions, null, 2));
 
   return questions;
 }

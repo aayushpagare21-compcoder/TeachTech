@@ -10,13 +10,15 @@ import {
 import { Button } from "teachtech/components/ui/button";
 import { FileUploadField } from "./FileUploadField";
 import { Alert, AlertDescription } from "teachtech/components/ui/alert";
-import { FileText } from "lucide-react";
+import { FileText, Loader2 } from "lucide-react";
 import { useAsyncFn } from "react-use";
+import AssessmentResults from "./EvaluateAssignmentResult";
+import { ErrorState, LoadingState } from "../evaluation/LoadingAndErrorState";
 
-async function evaluateAssigment(
+async function evaluateAssignment(
   questionFile: File,
   answerFile: File,
-  criteriaFile: File
+  criteriaFile: File,
 ) {
   const formData = new FormData();
   formData.append("questionFile", questionFile);
@@ -27,8 +29,12 @@ async function evaluateAssigment(
     method: "POST",
     body: formData,
   });
+
+  if (!data.ok) {
+    throw new Error("Failed to evaluate assignment");
+  }
+
   const res = await data.json();
-  console.log("res====", res);
   return res;
 }
 
@@ -38,9 +44,22 @@ const FileUploadForm = () => {
   const [criteriaFile, setCriteriaFile] = useState<File | null>(null);
   const [error, setError] = useState("");
 
-  const [{ value }, makeRequest] =
-    useAsyncFn(evaluateAssigment);
-  console.log("value====", value);
+  const [{ loading, error: requestError, value: results }, makeRequest] =
+    useAsyncFn(
+      async (questionFile: File, answerFile: File, criteriaFile: File) => {
+        try {
+          const result = await evaluateAssignment(
+            questionFile,
+            answerFile,
+            criteriaFile,
+          );
+          return result;
+        } catch (err: unknown) {
+          console.log("error", err);
+          throw new Error("Failed to evaluate assignment. Please try again.");
+        }
+      },
+    );
 
   const handleFileChange =
     (setter: React.Dispatch<React.SetStateAction<File | null>>) =>
@@ -64,17 +83,34 @@ const FileUploadForm = () => {
     makeRequest(questionFile, answerFile, criteriaFile);
   };
 
+  // Show results if available
+  if (results) {
+    return <AssessmentResults data={results} />;
+  }
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-3xl mx-auto mt-6 shadow-lg p-6">
+        <LoadingState />
+      </div>
+    );
+  }
+
   return (
-    <Card className="w-full max-w-3xl mx-auto mt-6">
+    <Card className="w-full max-w-3xl mx-auto mt-6 shadow-lg md:p-6">
       <CardHeader>
         <h1 className="text-[3rem] text-center">TeachTech</h1>
         <CardTitle className="flex items-center justify-center gap-2 leading-1">
           <FileText className="h-6 w-6" />
           TeachTech Assignment Evaluation
         </CardTitle>
-        <CardDescription className="text-center">
-          Please upload question file, answer file, and evaluation criteria file
-          in the format specified below.
+        <CardDescription className="flex flex-col">
+          <div className="text-center">
+            {" "}
+            Please upload question file, answer file, and evaluation criteria
+            file in the format specified below.
+          </div>
+          {requestError && <ErrorState error={requestError} />}
           <hr className="mt-4 mb-2" />
         </CardDescription>
       </CardHeader>
@@ -95,7 +131,7 @@ const FileUploadForm = () => {
                 <pre className="px-4">
                   {`Question 1(a): A quale regno si interessò soprattutto Federico II nel corso della sua vita? Quale zona comprendeva? Da chi Federico lo ereditò? Come lo amministrò?
 Total Marks: 10
-Question 1(b): Per quale motivo alcuni pontefici ostacolano Federico II? Quali sono i nomi? Quale strumento usano contro l’Imperatore?
+Question 1(b): Per quale motivo alcuni pontefici ostacolano Federico II? Quali sono i nomi? Quale strumento usano contro l'Imperatore?
 Total Marks: 10
 Question 1(c): Quando e come si concluderà la dinastia di Federico (Hohenstaufen) in Sicilia? Cosa avvenne a Benevento
 Total Marks: 10
@@ -105,6 +141,7 @@ Total Marks: 10
             }
             selectedFile={questionFile}
             onFileChange={handleFileChange(setQuestionFile)}
+            disabled={loading}
           />
           <FileUploadField
             id="criteriaFile"
@@ -129,7 +166,7 @@ Criteria: Regno di Sicilia
 marks: 1
 Criteria: Sud Italia 
 marks: 1
-Criteria: Costanza d’Altavilla 
+Criteria: Costanza d'Altavilla 
 marks: 2
 Criteria: Costituzioni melfitane 
 marks: 1.5
@@ -140,7 +177,7 @@ marks: 1.5
 Criteria: apertura culturale e tolleranza religiosa 
 marks: 1.5
 
-Evaluation Criteria for Question 1(b):
+Evaluation Criteria 1(b):
 Criteria: questione geopolitica/accerchiamento Stato della Chiesa 
 marks: 3
 Criteria: Innocenzo III, Onorio III
@@ -157,6 +194,7 @@ marks: 3
             }
             selectedFile={criteriaFile}
             onFileChange={handleFileChange(setCriteriaFile)}
+            disabled={loading}
           />
           <FileUploadField
             id="answerFile"
@@ -173,25 +211,46 @@ marks: 3
                 </ul>
                 <div className="font-bold">Example:</div>
                 <pre className="px-4">
-                  {`Answer 1(a): Federico ereditò il Regno di Sicilia da sua madre Costanza d’Altavilla. Regnò principalmente sul sud Italia. Nel suo governo si occupò di rimuovere privilegi ai nobili, distruggendo i castelli e inviando funzionari nei territori governati. 
+                  {`Answer 1(a): Federico ereditò il Regno di Sicilia da sua madre Costanza d'Altavilla. Regnò principalmente sul sud Italia. Nel suo governo si occupò di rimuovere privilegi ai nobili, distruggendo i castelli e inviando funzionari nei territori governati. 
 Answer 1(b): La Chiesa andò contro Federico II perché si sentiva accerchiata a nord dal Sacro Romani Impero a sud dal Regno di Sicilia. I papi utilizzarono contro Federico lo strumento della scomunica per ben 2 volte.
-Answer 1(c):Nel 1268 quando Corradino, nipote di Federico, venne sconfitto e decapitato in Abruzzo.
-
+Answer 1(c): Nel 1268 quando Corradino, nipote di Federico, venne sconfitto e decapitato in Abruzzo.
 `}
                 </pre>
               </div>
             }
             selectedFile={answerFile}
             onFileChange={handleFileChange(setAnswerFile)}
+            disabled={loading}
           />
+
+          {/* Show validation error */}
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
+
+          {/* Show request error */}
+          {requestError && (
+            <Alert variant="destructive">
+              <AlertDescription>{requestError.message}</AlertDescription>
+            </Alert>
+          )}
+
           <div className="text-center">
-            <Button type="submit" className="w-[200px] text-center py-6">
-              Submit Files
+            <Button
+              type="submit"
+              className="w-[200px] text-center py-6"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Submit Files"
+              )}
             </Button>
           </div>
         </form>
