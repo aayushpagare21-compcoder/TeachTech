@@ -100,36 +100,34 @@ export async function POST(req: NextRequest) {
 }
 function parseQuestionsWithMarks(input: string) {
   const questionRegex =
-    /Question\s*(\d+\([a-zA-Z]\))\s*:\s*(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/gi;
+    /Question\s*(\d+\([a-zA-Z]\))\s*:(.*?)\s*(?=Question\s*\d+\([a-zA-Z]\)|$)/gs; // 's' flag for multi-line matching
   const marksRegex =
     /(?:Total Marks|Marks|Punteggio Totale|Punti Totali|Valutazione)\s*[:\.\-\s]*\s*(\d+)/i;
 
-  const questions: {
-    identifier: string;
-    question: string;
-    totalMarks: number;
-  }[] = [];
+  const questions = [];
 
-  let match: RegExpExecArray | null;
-
+  let match;
   while ((match = questionRegex.exec(input)) !== null) {
     const identifier = match[1].trim(); // Capture the question identifier (like 1(a), 1(b), etc.)
-    const questionText = match[2].trim(); // Capture the question text
+    let questionText = match[2].trim(); // Capture the question text
+    
+    // Extract marks if available
     const marksMatch = marksRegex.exec(questionText);
-
     const totalMarks = marksMatch ? parseInt(marksMatch[1], 10) : 0; // Get marks for the question
+    
+    // Remove the marks information from the question text
+    questionText = questionText.replace(marksMatch ? marksMatch[0] : "", "").trim();
 
     questions.push({
       identifier,
-      question: questionText
-        .replace(marksMatch ? marksMatch[0] : "", "")
-        .trim(), // Remove marks info from question text
+      question: questionText,
       totalMarks,
     });
   }
 
   return questions;
 }
+
 type ParsedAnswer = {
   identifier: string;
   answerText: string;
